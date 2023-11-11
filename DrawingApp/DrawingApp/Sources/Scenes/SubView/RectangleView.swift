@@ -43,7 +43,7 @@ extension RectangleView {
     func bind(with state: Rectangle) {
         self.rectangle = state
         
-        backgroundColor = state.backgroundColor.uiColor
+        backgroundColor = UIColor.makeUIColor(for: state.backgroundColor)
         
         if state.isSelected {
             layer.borderWidth = 5
