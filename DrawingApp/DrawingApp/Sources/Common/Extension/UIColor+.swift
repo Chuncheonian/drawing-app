@@ -23,6 +23,7 @@ extension UIColor {
         case .orange: return .systemOrange
         case .purple: return .systemPurple
         case .yellow: return .systemYellow
+        case .red: return .systemRed
         }
     }
 }

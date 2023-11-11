@@ -78,7 +78,7 @@ extension CanvasViewModel {
                     
                     let newRectangle = Rectangle.init(
                         rect: .init(x: randomX, y: randomY, width: rectangleEdge, height: rectangleEdge),
-                        backgroundColor: SystemColor.random,
+                        backgroundColor: SystemColor.randomExcludingRed,
                         isSelected: false
                     )
                     

@@ -44,14 +44,8 @@ extension RectangleView {
         self.rectangle = state
         
         backgroundColor = UIColor.makeUIColor(for: state.backgroundColor)
-        
-        if state.isSelected {
-            layer.borderWidth = 5
-            layer.borderColor = UIColor.systemRed.cgColor
-        } else {
-            layer.borderWidth = 0
-            layer.borderColor = UIColor.clear.cgColor
-        }
+        layer.borderWidth = state.boarderWidth
+        layer.borderColor = UIColor.makeUIColor(for: state.borderColor).cgColor
     }
 }
 

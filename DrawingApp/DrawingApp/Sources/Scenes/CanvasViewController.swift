@@ -134,7 +134,7 @@ extension CanvasViewController: ToolbarViewDelegate {
     }
 }
 
-// MARK: - RectangleViewDelegate
+// MARK: - CanvasViewDelegate
 
 extension CanvasViewController: CanvasViewDelegate {
     func onTapRectangleView(_ view: RectangleView, rectangle: Rectangle) {
