@@ -25,7 +25,12 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: scene)
         
-        let canvasVC = CanvasViewController(viewModel: .init())
+        let drawingUseCaseImpl = DrawingUseCaseImpl()
+        let canvasVC = CanvasViewController(
+            viewModel: .init(
+                drawingUseCase: drawingUseCaseImpl
+            )
+        )
         
         window?.rootViewController = canvasVC
         window?.makeKeyAndVisible()

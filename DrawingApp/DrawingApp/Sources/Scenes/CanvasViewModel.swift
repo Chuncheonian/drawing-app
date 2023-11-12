@@ -33,7 +33,7 @@ final class CanvasViewModel {
     
     // PRIVATE
     private var cancellables: Set<AnyCancellable> = .init()
-    private let drawingUseCase: DrawingUseCase = DrawingUseCaseImpl()
+    private let drawingUseCase: any DrawingUseCase
     
     // PRIVATE - INPUT
     private let canvasViewRect: CurrentValueSubject<CGRect, Never> = .init(.zero)
@@ -46,7 +46,7 @@ final class CanvasViewModel {
     
     // MARK: - initialize
     
-    init() {
+    init(drawingUseCase: any DrawingUseCase){
         self.input = .init(
             canvasViewRect: canvasViewRect,
             onTapRectangleItemButton: onTapRectangleItemButton,
@@ -58,6 +58,7 @@ final class CanvasViewModel {
             updateRectangleView: updateRectangleView,
             currentLine: .init()
         )
+        self.drawingUseCase = drawingUseCase
         
         transform()
     }
