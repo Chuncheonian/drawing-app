@@ -109,10 +109,7 @@ extension CanvasViewModel {
                 
                 switch drawingGesture {
                 case .began(let point):
-                    let lineStream = drawingUseCase.createLineStream(
-                        from: point,
-                        color: SystemColor.randomExcludingRed
-                    )
+                    let lineStream = drawingUseCase.createLineStream(from: point)
                     
                     Task {
                         for await line in lineStream {

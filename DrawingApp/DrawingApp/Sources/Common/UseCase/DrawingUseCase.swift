@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DrawingUseCase {
-    func createLineStream(from point: CGPoint, color: SystemColor) -> AsyncStream<Line>
+    func createLineStream(from point: CGPoint) -> AsyncStream<Line>
     func addPointToCurrentLine(to point: CGPoint)
     func finishLineStream()
 }
@@ -19,8 +19,8 @@ final class DrawingUseCaseImpl: DrawingUseCase {
     private var lines: [Line] = []
     private var streamContinuation: AsyncStream<Line>.Continuation?
     
-    func createLineStream(from point: CGPoint, color: SystemColor) -> AsyncStream<Line> {
-        currentLine = Line(points: [point], color: color)
+    func createLineStream(from point: CGPoint) -> AsyncStream<Line> {
+        currentLine = Line(points: [point], color: SystemColor.randomExcludingRed)
         
         return .init { continuation in
             self.streamContinuation = continuation
