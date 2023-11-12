@@ -16,11 +16,16 @@ final class CanvasViewModel {
         let canvasViewRect: CurrentValueSubject<CGRect, Never>
         let onTapRectangleItemButton: PassthroughSubject<Void, Never>
         let onTapRectangleView: PassthroughSubject<Rectangle, Never>
+        // TODO: canvasTouch 관련 3개의 Subject를 하나로 합쳐보자
+        let canvasTouchesBegan: PassthroughSubject<CGPoint, Never>
+        let canvasTouchesMoved: PassthroughSubject<CGPoint, Never>
+        let canvasTouchesEnded: PassthroughSubject<Void, Never>
     }
     
     struct Output {
         let appendRectangleView: PassthroughSubject<Rectangle, Never>
         let updateRectangleView: PassthroughSubject<Rectangle, Never>
+        let currentLine: PassthroughSubject<Line?, Never>
     }
     
     // MARK: - property
@@ -31,6 +36,7 @@ final class CanvasViewModel {
     
     // PRIVATE
     private var cancellables: Set<AnyCancellable> = .init()
+    private let drawingUseCase: DrawingUseCase = DrawingUseCaseImpl()
     
     // PRIVATE - INPUT
     private let canvasViewRect: CurrentValueSubject<CGRect, Never> = .init(.zero)
@@ -47,11 +53,15 @@ final class CanvasViewModel {
         self.input = .init(
             canvasViewRect: canvasViewRect,
             onTapRectangleItemButton: onTapRectangleItemButton,
-            onTapRectangleView: onTapRectangleView
+            onTapRectangleView: onTapRectangleView,
+            canvasTouchesBegan: .init(),
+            canvasTouchesMoved: .init(),
+            canvasTouchesEnded: .init()
         )
         self.output = .init(
             appendRectangleView: appendRectangleView,
-            updateRectangleView: updateRectangleView
+            updateRectangleView: updateRectangleView,
+            currentLine: .init()
         )
         
         transform()
@@ -94,6 +104,40 @@ extension CanvasViewModel {
                 var _rectangle = rectangle
                 _rectangle.isSelected.toggle()
                 updateRectangleView.send(_rectangle)
+            })
+            .store(in: &cancellables)
+        
+        input.canvasTouchesBegan
+            .sink(receiveValue: { [weak self] point in
+                guard let self else { return }
+                
+                let lineStream = drawingUseCase.createLineStream(
+                    from: point,
+                    color: SystemColor.randomExcludingRed
+                )
+                
+                Task {
+                    for await line in lineStream {
+                        self.output.currentLine.send(line)
+                    }
+                    self.output.currentLine.send(nil)
+                }
+            })
+            .store(in: &cancellables)
+        
+        input.canvasTouchesMoved
+            .sink(receiveValue: { [weak self] point in
+                guard let self else { return }
+                
+                drawingUseCase.addPointToCurrentLine(to: point)
+            })
+            .store(in: &cancellables)
+        
+        input.canvasTouchesEnded
+            .sink(receiveValue: { [weak self] point in
+                guard let self else { return }
+                
+                drawingUseCase.finishLineStream()
             })
             .store(in: &cancellables)
     }

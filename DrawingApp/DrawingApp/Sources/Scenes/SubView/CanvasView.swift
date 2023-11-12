@@ -9,6 +9,9 @@ import UIKit
 
 protocol CanvasViewDelegate: AnyObject {
     func onTapRectangleView(_ view: RectangleView, rectangle: Rectangle)
+    func didBeginTouchAtPoint(point: CGPoint)
+    func didMoveTouchToPoint(point: CGPoint)
+    func didEndTouchToPoint()
 }
 
 final class CanvasView: UIView {
@@ -19,9 +22,6 @@ final class CanvasView: UIView {
     weak var delegate: CanvasViewDelegate?
     
     // PRIVATE
-    private var layers: [CAShapeLayer] = []
-    
-    private var currentPath: UIBezierPath?
     private var currentLayer: CAShapeLayer?
     
     // MARK: - life cycle
@@ -43,43 +43,19 @@ final class CanvasView: UIView {
 
 extension CanvasView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        let point = touch.location(in: self)
+        guard let point = touches.first?.location(in: self) else { return }
         
-        let newPath = UIBezierPath()
-        newPath.move(to: point)
-        
-        currentPath = newPath
-        
-        let newLayer = CAShapeLayer()
-        newLayer.strokeColor = UIColor.black.cgColor
-        newLayer.fillColor = UIColor.clear.cgColor
-        newLayer.lineWidth = 5
-        newLayer.lineCap = .round
-        newLayer.path = newPath.cgPath
-        
-        currentLayer = newLayer
-        layer.addSublayer(newLayer)
+        delegate?.didBeginTouchAtPoint(point: point)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first,
-              let currentPath = currentPath,
-              let currentLayer = currentLayer
-        else { return }
+        guard let point = touches.first?.location(in: self) else { return }
         
-        let point = touch.location(in: self)
-        currentPath.addLine(to: point)
-        currentLayer.path = currentPath.cgPath
+        delegate?.didMoveTouchToPoint(point: point)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let currentLayer = currentLayer else { return }
-        
-        layers.append(currentLayer)
-        
-        self.currentPath = nil
-        self.currentLayer = nil
+        delegate?.didEndTouchToPoint()
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -90,12 +66,63 @@ extension CanvasView {
 // MARK: - internal method
 
 extension CanvasView {
+    
     func append(rectangle: Rectangle) {
         let rectangleView = RectangleView(frame: rectangle.rect)
         rectangleView.bind(with: rectangle)
         rectangleView.delegate = self
         
         addSubview(rectangleView)
+    }
+    
+    func drawLine(_ line: Line?) {
+        switch line {
+        case .some(let line):
+            updateCanvas(with: line)
+        case .none:
+            currentLayer = nil
+        }
+    }
+}
+
+// MARK: - private method for drawing line
+
+extension CanvasView {
+    
+    private func updateCanvas(with line: Line) {
+        if currentLayer == nil {
+            createShapeLayer(for: line)
+        }
+        updateCurrentLayerPath(with: line)
+    }
+    
+    private func createShapeLayer(for line: Line) {
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.strokeColor = UIColor.makeUIColor(for: line.color).cgColor
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.lineWidth = 5
+        shapeLayer.lineCap = .round
+        
+        currentLayer = shapeLayer
+        layer.addSublayer(shapeLayer)
+    }
+    
+    private func updateCurrentLayerPath(with line: Line) {
+        guard let path = createPath(for: line) else { return }
+        currentLayer?.path = path.cgPath
+    }
+    
+    private func createPath(for line: Line) -> UIBezierPath? {
+        guard let firstPoint = line.points.first else { return nil }
+        
+        let path = UIBezierPath()
+        path.move(to: firstPoint)
+        
+        for point in line.points.dropFirst() {
+            path.addLine(to: point)
+        }
+        
+        return path
     }
 }
 
@@ -104,20 +131,10 @@ extension CanvasView {
 extension CanvasView {
     private func setUpUI() {
         setUpView()
-        setUpLayout()
-        setUpComponents()
     }
     
     private func setUpView() {
         backgroundColor = .white
-    }
-    
-    private func setUpLayout() {
-        
-    }
-    
-    private func setUpComponents() {
-        
     }
 }
 

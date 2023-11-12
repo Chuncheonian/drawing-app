@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7631195F2AFF908F00EFE544 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7631195E2AFF908F00EFE544 /* UIColor+.swift */; };
+		763119642AFFDE4100EFE544 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763119632AFFDE4100EFE544 /* Line.swift */; };
+		763119672AFFDEC300EFE544 /* DrawingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763119662AFFDEC300EFE544 /* DrawingUseCase.swift */; };
 		764CDA1E2AD9696300527094 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764CDA1D2AD9696300527094 /* AppDelegate.swift */; };
 		764CDA202AD9696300527094 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764CDA1F2AD9696300527094 /* SceneDelegate.swift */; };
 		764CDA222AD9696300527094 /* CanvasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764CDA212AD9696300527094 /* CanvasViewController.swift */; };
@@ -45,6 +47,8 @@
 
 /* Begin PBXFileReference section */
 		7631195E2AFF908F00EFE544 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		763119632AFFDE4100EFE544 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		763119662AFFDEC300EFE544 /* DrawingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingUseCase.swift; sourceTree = "<group>"; };
 		764CDA1A2AD9696300527094 /* DrawingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrawingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		764CDA1D2AD9696300527094 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		764CDA1F2AD9696300527094 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -98,6 +102,14 @@
 				7631195E2AFF908F00EFE544 /* UIColor+.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		763119652AFFDEAF00EFE544 /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+				763119662AFFDEC300EFE544 /* DrawingUseCase.swift */,
+			);
+			path = UseCase;
 			sourceTree = "<group>";
 		};
 		764CDA112AD9696300527094 = {
@@ -198,6 +210,7 @@
 			children = (
 				76D2DEFA2AF91F1B006A0B3A /* AppConfig */,
 				76D2DEFB2AF91F22006A0B3A /* Entity */,
+				763119652AFFDEAF00EFE544 /* UseCase */,
 				7631195D2AFF907F00EFE544 /* Extension */,
 				76D2DEFC2AF9226C006A0B3A /* SystemColor.swift */,
 			);
@@ -227,6 +240,7 @@
 			isa = PBXGroup;
 			children = (
 				7699C0642AF7E69800C7E491 /* Rectangle.swift */,
+				763119632AFFDE4100EFE544 /* Line.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -361,6 +375,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				763119672AFFDEC300EFE544 /* DrawingUseCase.swift in Sources */,
 				76D2DEFD2AF9226C006A0B3A /* SystemColor.swift in Sources */,
 				7699C0552AF7AEEF00C7E491 /* CanvasViewModel.swift in Sources */,
 				7699C0572AF7C25D00C7E491 /* AppConfig.swift in Sources */,
@@ -368,6 +383,7 @@
 				764CDA222AD9696300527094 /* CanvasViewController.swift in Sources */,
 				7631195F2AFF908F00EFE544 /* UIColor+.swift in Sources */,
 				764CDA1E2AD9696300527094 /* AppDelegate.swift in Sources */,
+				763119642AFFDE4100EFE544 /* Line.swift in Sources */,
 				7699C0652AF7E69800C7E491 /* Rectangle.swift in Sources */,
 				7699C0632AF7D59B00C7E491 /* RectangleView.swift in Sources */,
 				764CDA202AD9696300527094 /* SceneDelegate.swift in Sources */,
