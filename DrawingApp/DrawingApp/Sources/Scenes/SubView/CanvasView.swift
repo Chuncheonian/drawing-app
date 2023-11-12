@@ -9,9 +9,7 @@ import UIKit
 
 protocol CanvasViewDelegate: AnyObject {
     func onTapRectangleView(_ view: RectangleView, rectangle: Rectangle)
-    func didBeginTouchAtPoint(point: CGPoint)
-    func didMoveTouchToPoint(point: CGPoint)
-    func didEndTouchToPoint()
+    func didChangeDrawingGesture(_ drawingGesture: DrawingGesture)
 }
 
 final class CanvasView: UIView {
@@ -45,17 +43,17 @@ extension CanvasView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let point = touches.first?.location(in: self) else { return }
         
-        delegate?.didBeginTouchAtPoint(point: point)
+        delegate?.didChangeDrawingGesture(.began(point: point))
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let point = touches.first?.location(in: self) else { return }
         
-        delegate?.didMoveTouchToPoint(point: point)
+        delegate?.didChangeDrawingGesture(.changed(point: point))
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        delegate?.didEndTouchToPoint()
+        delegate?.didChangeDrawingGesture(.ended)
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {

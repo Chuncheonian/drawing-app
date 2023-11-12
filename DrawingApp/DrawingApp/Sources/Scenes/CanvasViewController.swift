@@ -154,15 +154,7 @@ extension CanvasViewController: CanvasViewDelegate {
         viewModel.input.onTapRectangleView.send(rectangle)
     }
     
-    func didBeginTouchAtPoint(point: CGPoint) {
-        viewModel.input.canvasTouchesBegan.send(point)
-    }
-    
-    func didMoveTouchToPoint(point: CGPoint) {
-        viewModel.input.canvasTouchesMoved.send(point)
-    }
-    
-    func didEndTouchToPoint() {
-        viewModel.input.canvasTouchesEnded.send(())
+    func didChangeDrawingGesture(_ drawingGesture: DrawingGesture) {
+        viewModel.input.drawLine.send(drawingGesture)
     }
 }
